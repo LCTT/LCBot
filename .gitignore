@@ -1,0 +1,11 @@
+# git ignore file for wxbot
+
+# 跟踪 .py类型的文件
+!*.py
+
+# 过滤以下类型的文件
+*.pyc
+*.pkl
+*.log
+*.swp
+
