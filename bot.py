@@ -9,19 +9,6 @@ from wxpy import *
 bot = Bot('bot.pkl', console_qr=False)
 
 '''
-检测使用是否是错误的帐号
-'''
-if bot.self.nick_name == '白宦成':
-    raise ValueError("Wrong User!")
-
-
-'''
-验证信息
-'''
-def valid_msg(msg):
-    return '运维密码' in msg.text.lower()
-
-'''
 关键字到群名的映射
 '''
 keyword_of_group = {'运维密码':"“运维密码”体验群", 'dba':"Linux中国Dba群",\
@@ -66,12 +53,6 @@ def exist_friends(msg):
         print("来自 {} 的消息是：".format(msg.sender.name), msg.text.lower())
         return '口令不正确！'
 
-teamgroup = ensure_one(bot.groups().search('“运维密码”体验群'))
-
-welcome_text = '''\U0001F389 欢迎加入运维密码体验群！
-\U0001f603 有问题可以直接@白宦成
-\U0001F4D6 提问前请看 dwz.cn/passwd'''
-
 
 @bot.register(teamgroup)
 def help_msg(msg):
@@ -80,7 +61,5 @@ def help_msg(msg):
             return welcome_text
         else:
             return '我没听懂你说的啥[奸笑]'
-
-
 
 embed()
