@@ -27,6 +27,8 @@ pip3 install -U wxpy
 ```
 python3 bot.py
 ```
+## FAQ
+查看 [FAQ](https://github.com/bestony/LCBot/wiki/FAQ)
 ## Todo
 
 查看 [Todo](TODO.md)
