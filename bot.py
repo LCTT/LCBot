@@ -22,6 +22,16 @@ rp_new_member_name = (
 )
 
 '''
+为保证兼容，在下方admins 中使用标准用法
+在 admin_puids 中确保将机器人的puid 加入
+机器人的puid 可以通过 bot.self.puid 获得
+'''
+admin_puids = (
+    '8b8b7560',
+    '69f27236'
+)
+
+'''
 定义需要管理的群
 PUID 可以通过 bot.groups("群名")[0].puid 获取
 '''
@@ -31,6 +41,8 @@ group_puids = (
 
 # 格式化 Group
 groups = list(map(lambda x: bot.groups().search(puid=x)[0], group_puids))
+# 格式化 Admin
+admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
 
 # 新人入群的欢迎语
 welcome_text = '''🎉 欢迎 @{} 的加入！
@@ -45,7 +57,50 @@ keyword_of_group = {
     "lfs":"Linux中国◆LFS群",
     "dba":"Linux中国◆DBA群"
 }
+
+# 远程踢人命令: 移出 @<需要被移出的人>
+rp_kick = re.compile(r'^移出\s*@(.+?)(?:\u2005?\s*$)')
+
+
 # 下方为函数定义
+
+'''
+判断消息发送者是否在管理员列表
+'''
+def from_admin(msg):
+    """
+    判断 msg 中的发送用户是否为管理员
+    :param msg: 
+    :return: 
+    """
+    if not isinstance(msg, Message):
+        raise TypeError('expected Message, got {}'.format(type(msg)))
+    from_user = msg.member if isinstance(msg.chat, Group) else msg.sender
+    print(admins)
+    return from_user in admins
+
+'''
+远程踢人命令
+'''
+def remote_kick(msg):
+    if msg.type is TEXT:
+        match = rp_kick.search(msg.text)
+        if match:
+            name_to_kick = match.group(1)
+
+            if not from_admin(msg):
+                return '感觉有点不对劲… @{}'.format(msg.member.name)
+
+            member_to_kick = ensure_one(list(filter(
+                lambda x: x.name == name_to_kick, msg.chat)))
+            if member_to_kick  == bot.self:
+                return '无法移出 @{}'.format(member_to_kick.name)
+            if member_to_kick in admins:
+                return '无法移出 @{}'.format(member_to_kick.name)
+
+            member_to_kick.remove()
+            return '成功移出 @{}'.format(member_to_kick.name)
+
 
 '''
 邀请消息处理
@@ -121,6 +176,15 @@ def welcome(msg):
     name = get_new_member_name(msg)
     if name:
         return welcome_text.format(name)
+
+# 管理群内的消息处理
+@bot.register(groups, except_self=False)
+def wxpy_group(msg):
+    ret_msg = remote_kick(msg)
+    if ret_msg:
+        return ret_msg
+    elif msg.is_at:
+        pass
 
 
 
