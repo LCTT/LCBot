@@ -4,14 +4,18 @@
 from wxpy import *
 import re
 
+
 '''
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
 bot = Bot('bot.pkl', console_qr=True)
+
+
 '''
 开启 PUID 用于后续的控制
 '''
 bot.enable_puid('wxpy_puid.pkl')
+
 
 '''
 邀请信息处理
@@ -136,7 +140,11 @@ def invite(user, keyword):
     print(len(group))
     if len(group) > 0:
         target_group = ensure_one(group)
-        target_group.add_members(user, use_invitation=True)
+        if user in target_group:
+            content = "您已经加入了{} [微笑]".format(target_group.nick_name)
+            user.send(content)
+        else:
+            target_group.add_members(user, use_invitation=True)
     else:
         print("没有找到", keyword_of_group[keyword])
 
