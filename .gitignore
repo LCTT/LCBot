@@ -1,4 +1,4 @@
-# git ignore file for wxbot
+# git ignore file for LCBot
 
 # 跟踪 .py类型的文件
 !*.py
