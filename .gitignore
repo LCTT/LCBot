@@ -8,4 +8,4 @@
 *.pkl
 *.log
 *.swp
-
+.idea/
