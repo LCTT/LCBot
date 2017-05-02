@@ -144,9 +144,12 @@ def invite(user, keyword):
             content = "您已经加入了{} [微笑]".format(target_group.nick_name)
             user.send(content)
         else:
-            target_group.add_members(user, use_invitation=True)
+            try:
+                target_group.add_members(user, use_invitation=True)
+            except:
+                user.send("邀请错误！机器人邀请好友进群以达当日限制。请您明日再试")
     else:
-        print("没有找到", keyword_of_group[keyword])
+        user.send("该群状态有误，您换个关键词试试？")
 
 # 下方为消息处理
 
