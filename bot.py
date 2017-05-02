@@ -26,10 +26,10 @@ rp_new_member_name = (
 )
 
 '''
-为保证兼容，在下方admins 中使用标准用法
+为保证兼容，在下方admins中使用标准用法
 在 admin_puids 中确保将机器人的puid 加入
 机器人的puid 可以通过 bot.self.puid 获得
-其他用户的PUID 可以通过 bot.friends().search("昵称")[0].puid 获取
+其他用户的PUID 可以通过 执行 export_puid.py 生成 data 文件，在data 文件中获取
 '''
 admin_puids = (
     '8b8b7560',
@@ -38,7 +38,7 @@ admin_puids = (
 
 '''
 定义需要管理的群
-PUID 可以通过 bot.groups().search("群名")[0].puid 获取 获取
+群的PUID 可以通过 执行 export_puid.py 生成 data 文件，在data 文件中获取
 '''
 group_puids = (
      '6a698e9c',
