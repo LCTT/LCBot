@@ -22,11 +22,23 @@ LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国
 - Python 3
 
 ## 安装
-执行命令
+下载源码
 ```
+git clone git@github.com:LCTT/LCBot.git
+```
+安装拓展
+```
+cd LCBot
 pip3 install -U wxpy
 ```
+
 ## 使用
+首先，获取puid
+```
+python3 export_puid.py
+```
+执行成功后，在当前目录下会生成一个data文件，在data文件中，你可以看的用户的puid和群的puid
+编辑bot.py中第 34 行和 41行，分别填入用户的puid 和群的puid 
 执行命令
 ```
 python3 bot.py
