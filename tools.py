@@ -2,7 +2,6 @@
 # coding: utf-8
 
 from wxpy import *
-import re
 
 
 bot = Bot('bot.pkl', console_qr=True)
