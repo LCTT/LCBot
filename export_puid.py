@@ -17,7 +17,7 @@ bot.enable_puid('wxpy_puid.pkl')
 friends = bot.friends()
 groups = bot.groups()
 
-output = open('data', 'w')
+output = open('data', 'w',encoding='UTF-8')
 
 output.write("-----Friends-------\n")
 for i in friends:
