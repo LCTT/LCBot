@@ -29,7 +29,7 @@ from wxpy import *
 import re
 bot = Bot('bot.pkl', console_qr=True)
 
-target_group = bot.groups().search("机器人测试群")[0]
+target_group = bot.groups().search(group_name)[0]
 
 '''
 邀请消息处理
