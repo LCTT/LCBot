@@ -21,12 +21,10 @@ with  open('data', 'w',encoding='UTF-8') as output:
     output.write("-----Friends-------\n")
     for i in friends:
         output.write(i.nick_name + " ---> " + i.puid + "\n")
-        pass
     
     output.write("-----Groups-------\n")
     for i in groups:
         output.write(i.name + " ---> " + i.puid + "\n")
-        pass
 
 
 
