@@ -77,8 +77,42 @@ keyword_of_group = {
 # 远程踢人命令: 移出 @<需要被移出的人>
 rp_kick = re.compile(r'^移出\s*@(.+?)(?:\u2005?\s*$)')
 
+'''
+地区群
+'''
+city_group = {
+    "北京":"Linux中国◆北京群",
+    "上海":"Linux中国◆上海群",
+    "广州":"Linux中国◆广州群",
+}
+
+female_group="Linux中国◆技术美女群"
 
 # 下方为函数定义
+
+'''
+条件邀请
+'''
+def condition_invite(user):
+    if user.sex == 2:
+        female_groups = bot.groups().search(female_group)[0]
+        try:
+            female_groups.add_members(user, use_invitation=True)
+            pass
+        except:
+            pass
+    if (user.province in city_group.keys() or user.city in city_group.keys()):
+        try:
+            target_city_group = bot.groups().search(city_group[user.province])[0]
+            pass
+        except:
+            target_city_group = bot.groups().search(city_group[user.city])[0]
+            pass
+        try:
+            if user not in target_city_group:
+                target_city_group.add_members(user, use_invitation=True)
+        except:
+            pass
 
 '''
 判断消息发送者是否在管理员列表
