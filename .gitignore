@@ -8,4 +8,5 @@
 *.pkl
 *.log
 *.swp
-.idea/.python-version
+.idea/
+.python-version
