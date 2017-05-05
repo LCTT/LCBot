@@ -34,7 +34,6 @@ git clone https://github.com/LCTT/LCBot.git
 ```
 cd LCBot
 pip3 install -U wxpy
-pip3 install pillow
 ```
 
 ## 使用
