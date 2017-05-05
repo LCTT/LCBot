@@ -28,7 +28,7 @@ LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国
 ## 安装
 下载源码
 ```
-git clone git@github.com:LCTT/LCBot.git
+git clone https://github.com/LCTT/LCBot.git
 ```
 安装拓展
 ```
