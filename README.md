@@ -11,7 +11,7 @@ LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国
 
 扫描二维码或搜索微信号`linux_cn`，回复关键词 `机器人` ，即可拉入本项目微信讨论群
 
-视频教程地址：[点我查看视频教程](http://dwz.cn/lcbot) | [Linux/macOS 使用教程](https://v.qq.com/x/page/k03996ry5o1.html) |[Win 10完整使用教程](https://v.qq.com/x/page/y03990en5qu.html)
+视频教程地址：[点我查看视频教程集合](http://dwz.cn/lcbot) | [Linux/macOS 使用教程](https://v.qq.com/x/page/k03996ry5o1.html) |[完整版 Win 10 使用教程](https://v.qq.com/x/page/y03990en5qu.html) 
 
 免登录意见反馈：[我要新功能！](https://wj.qq.com/s/1334670/bb03/)
 
@@ -30,10 +30,11 @@ LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国
 ```
 git clone https://github.com/LCTT/LCBot.git
 ```
-安装拓展
+安装拓展，并设置输出格式为utf8
 ```
 cd LCBot
 pip3 install -U wxpy
+sudo localectl set-locale LANG=C.UTF-8
 ```
 
 ## 使用
