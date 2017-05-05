@@ -49,7 +49,7 @@ python3 export_puid.py
 python3 bot.py
 ```
 ## FAQ
-查看 [FAQ](https://github.com/bestony/LCBot/wiki/FAQ)
+查看 [FAQ](https://github.com/LCTT/LCBot/wiki/FAQ)
 ## Todo
 
 查看 [Todo](TODO.md)
