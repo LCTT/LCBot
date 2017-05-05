@@ -9,3 +9,5 @@
 *.log
 *.swp
 .idea/
+.python-version
+data
