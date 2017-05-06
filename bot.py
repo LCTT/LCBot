@@ -51,13 +51,14 @@ admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
 
 # 新人入群的欢迎语
 welcome_text = '''🎉 欢迎 @{} 的加入！
-😃 有问题请私聊 @Linux中国
+😃 有问题请私聊我。
 '''
 
-invite_text = """欢迎您，我是 Linux 中国 微信群助手，
+invite_text = """欢迎您，我是「Linux 中国」微信群助手，
 请输入如下关键字加入群：
-运维 开发 嵌入式  运维密码 学生 机器人 安全
-DBA PHP Python Golang Docker LFS
+- 运维 开发 安全 嵌入式 学生
+- 运维密码  机器人 
+- DBA PHP Python Golang Docker LFS
 进群四件事：
 1、阅读群公告，
 2、修改群名片，
@@ -75,7 +76,7 @@ keyword_of_group = {
 }
 
 # 远程踢人命令: 移出 @<需要被移出的人>
-rp_kick = re.compile(r'^移出\s*@(.+?)(?:\u2005?\s*$)')
+rp_kick = re.compile(r'^[移出|移除|踢出|拉黑]\s*@(.+?)(?:\u2005?\s*$)')
 
 '''
 地区群
@@ -175,13 +176,13 @@ def invite(user, keyword):
     if len(group) > 0:
         target_group = ensure_one(group)
         if user in target_group:
-            content = "您已经加入了{} [微笑]".format(target_group.nick_name)
+            content = "您已经加入了 {} [微笑]".format(target_group.nick_name)
             user.send(content)
         else:
             try:
                 target_group.add_members(user, use_invitation=True)
             except:
-                user.send("邀请错误！机器人邀请好友进群以达当日限制。请您明日再试")
+                user.send("邀请错误！机器人邀请好友进群已达当日限制。请您明日再试")
     else:
         user.send("该群状态有误，您换个关键词试试？")
 
