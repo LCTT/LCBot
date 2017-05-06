@@ -12,11 +12,11 @@
  - [ ] 自动拉群：自动建群时，拉指定的人加群。
  ------------
  - [ ] 数据表：列举当前可拉的群和群内人数
- - [ ] 机器人群内命令：规则参看 https://github.com/bestony/LCBot/issues/7
- - [ ] 自动T人：移除一个月未发言的人。 https://github.com/bestony/LCBot/issues/2
+ - [ ] 机器人群内命令：规则参看 https://github.com/LCTT/LCBot/issues/7
+ - [ ] 自动T人：移除一个月未发言的人。 https://github.com/LCTT/LCBot/issues/2
  ------------
  - [ ] 注册码发放
  - [ ] 对接 MySQL 数据库
 ------------
- - [ ] 支持Linux 命令查询 ：https://github.com/bestony/LCBot/issues/1
+ - [ ] 支持Linux 命令查询 ：https://github.com/LCTT/LCBot/issues/1
  
