@@ -36,6 +36,20 @@ git clone https://github.com/LCTT/LCBot.git
 cd LCBot
 pip3 install -U -r  requirements.txt
 ```
+## Docker 版本
+感谢 [@OSMeteor](https://github.com/OSMeteor/pythonlcbot) 提供的 Docker 版本
+
+使用方法：
+
+```
+docker pull osmeteor/pythonlcbot
+docker run -i -t osmeteor/pythonlcbot /bin/bash
+cd /opt/LCBot
+python export_puid.py
+python bot.py
+```
+
+
 
 ## 使用
 首先，获取puid
