@@ -2,14 +2,18 @@
 # coding: utf-8
 
 from wxpy import *
+from config import *
 import re
-
+from wxpy.utils import start_new_thread
+import time
+import os
 
 '''
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
 bot = Bot('bot.pkl', console_qr=True)
 
+tuling = Tuling(api_key=turing_key)
 
 '''
 开启 PUID 用于后续的控制
@@ -25,71 +29,48 @@ rp_new_member_name = (
     re.compile(r'邀请"(.+)"加入'),
 )
 
-'''
-为保证兼容，在下方admins中使用标准用法
-在 admin_puids 中确保将机器人的puid 加入
-机器人的puid 可以通过 bot.self.puid 获得
-其他用户的PUID 可以通过 执行 export_puid.py 生成 data 文件，在data 文件中获取
-'''
-admin_puids = (
-    '8b8b7560',
-    '69f27236'
-)
-
-'''
-定义需要管理的群
-群的PUID 可以通过 执行 export_puid.py 生成 data 文件，在data 文件中获取
-'''
-group_puids = (
-     '6a698e9c',
- )
-
 # 格式化 Group
 groups = list(map(lambda x: bot.groups().search(puid=x)[0], group_puids))
 # 格式化 Admin
 admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
 
-# 新人入群的欢迎语
-welcome_text = '''🎉 欢迎 @{} 的加入！
-😃 有问题请私聊我。
-'''
-
-invite_text = """欢迎您，我是「Linux 中国」微信群助手，
-请输入如下关键字加入群：
-- 运维 开发 安全 嵌入式 学生 找工作
-- 运维密码  机器人 
-- DBA PHP Python Golang Docker LFS vim
-进群四件事：
-1、阅读群公告，
-2、修改群名片，
-3、做自我介绍，
-4、发个总计一元、一百份的红包
-请言行遵守群内规定，违规者将受到处罚，拉入黑名单。"""
-
-'''
-设置群组关键词和对应群名
-* 关键词必须为小写，查询时会做相应的小写处理
-'''
-keyword_of_group = {
-    "lfs":"Linux中国◆LFS群",
-    "dba":"Linux中国◆DBA群"
-}
-
 # 远程踢人命令: 移出 @<需要被移出的人>
 rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)')
 
-'''
-地区群
-'''
-city_group = {
-    "北京":"Linux中国◆北京群",
-    "上海":"Linux中国◆上海群",
-    "广州":"Linux中国◆广州群",
-}
-
-female_group="Linux中国◆技术美女群"
 
 # 下方为函数定义
+
+
+
+'''
+机器人消息提醒设置
+'''
+group_receiver = ensure_one(bot.groups().search(alert_group))
+logger = get_wechat_logger(group_receiver)
+logger.error("机器人登陆成功！")
+
+'''
+重启机器人
+'''
+def _restart():
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+'''
+定时报告进程状态
+'''
+def heartbeat():
+    while bot.alive:
+        time.sleep(3600)
+        # noinspection PyBroadException
+        try:
+            logger.error("LCBot is Online")
+        except ResponseError as e:
+            if 1100 <= e.err_code <= 1102:
+                logger.critical('LCBot offline: {}'.format(e))
+                _restart()
+
+start_new_thread(heartbeat)
 
 '''
 条件邀请
@@ -127,7 +108,6 @@ def from_admin(msg):
     if not isinstance(msg, Message):
         raise TypeError('expected Message, got {}'.format(type(msg)))
     from_user = msg.member if isinstance(msg.chat, Group) else msg.sender
-    print(admins)
     return from_user in admins
 
 '''
@@ -149,6 +129,7 @@ def remote_kick(msg):
             if member_to_kick in admins:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
+            logger.error(str("【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
             member_to_kick.remove()
             return '成功移出 @{}'.format(member_to_kick.name)
 
@@ -172,7 +153,6 @@ def get_new_member_name(msg):
 '''
 def invite(user, keyword):
     group = bot.groups().search(keyword_of_group[keyword])
-    print(len(group))
     if len(group) > 0:
         target_group = ensure_one(group)
         if user in target_group:
@@ -215,7 +195,7 @@ def wxpy_group(msg):
     if ret_msg:
         return ret_msg
     elif msg.is_at:
-        pass
+        tuling.do_reply(msg)
 
 
 @bot.register(groups, NOTE)
