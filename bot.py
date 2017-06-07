@@ -152,9 +152,14 @@ def get_new_member_name(msg):
 按关键字搜索相应的群，如果存在相应的群，就向用户发起邀请。
 '''
 def invite(user, keyword):
+    from random import randrange
     group = bot.groups().search(keyword_of_group[keyword])
     if len(group) > 0:
-        target_group = ensure_one(group)
+        if len(group) == 1:
+            target_group = group[0]
+        else:
+            index = randrange(len(group))
+            target_group = group[index]
         if user in target_group:
             content = "您已经加入了 {} [微笑]".format(target_group.nick_name)
             user.send(content)
