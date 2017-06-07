@@ -4,7 +4,9 @@
 from wxpy import *
 from config import *
 import re
-
+from wxpy.utils import start_new_thread
+import time
+import os
 
 '''
 使用 cache 来缓存登陆信息，同时使用控制台登陆
@@ -38,12 +40,37 @@ rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)'
 
 # 下方为函数定义
 
+
+
 '''
 机器人消息提醒设置
 '''
 group_receiver = ensure_one(bot.groups().search(alert_group))
 logger = get_wechat_logger(group_receiver)
 logger.error("机器人登陆成功！")
+
+'''
+重启机器人
+'''
+def _restart():
+    os.execv(sys.executable, [sys.executable] + sys.argv)
+
+
+'''
+定时报告进程状态
+'''
+def heartbeat():
+    while bot.alive:
+        time.sleep(3600)
+        # noinspection PyBroadException
+        try:
+            logger.error("LCBot is Online")
+        except ResponseError as e:
+            if 1100 <= e.err_code <= 1102:
+                logger.critical('LCBot offline: {}'.format(e))
+                _restart()
+
+start_new_thread(heartbeat)
 
 '''
 条件邀请
