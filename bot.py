@@ -12,6 +12,7 @@ import os
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
 bot = Bot('bot.pkl', console_qr=True)
+bot.message.max_history = 0
 
 tuling = Tuling(api_key=turing_key)
 
