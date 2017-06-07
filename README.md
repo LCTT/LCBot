@@ -60,7 +60,7 @@ python3 export_puid.py
 
 > 如果执行后，二维码展示不正常 ，可以执行`sudo localectl set-locale LANG=C.UTF-8`
 
-编辑bot.py中第 34 行和 41行，分别填入用户的puid 和群的puid 
+编辑 config.py 中第 10 行和 20 行，分别填入用户的puid 和群的puid 
 执行命令
 ```
 python3 bot.py
