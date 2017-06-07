@@ -18,6 +18,8 @@ friends = bot.friends()
 groups = bot.groups()
 
 with  open('data', 'w',encoding='UTF-8') as output:
+    output.write("-----Bots-------\n")
+    output.write(str(bot.self.name + '--->'+ bot.self.puid + "\n"))
     output.write("-----Friends-------\n")
     for i in friends:
         output.write(str(i.nick_name + " ---> " + i.puid + "\n"))
