@@ -19,6 +19,7 @@ admin_puids = (
 '''
 group_puids = (
      '6128fb06',
+     '2eaf2824',
 )
 
  # 新人入群的欢迎语
@@ -55,3 +56,7 @@ city_group = {
 }
 
 female_group="机器人测试群"
+
+alert_group="机器人测试群"
+
+turing_key=''

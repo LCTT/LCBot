@@ -11,6 +11,7 @@ import re
 '''
 bot = Bot('bot.pkl', console_qr=True)
 
+tuling = Tuling(api_key=turing_key)
 
 '''
 开启 PUID 用于后续的控制
@@ -36,6 +37,13 @@ rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)'
 
 
 # 下方为函数定义
+
+'''
+机器人消息提醒设置
+'''
+group_receiver = ensure_one(bot.groups().search(alert_group))
+logger = get_wechat_logger(group_receiver)
+logger.error("机器人登陆成功！")
 
 '''
 条件邀请
@@ -73,7 +81,6 @@ def from_admin(msg):
     if not isinstance(msg, Message):
         raise TypeError('expected Message, got {}'.format(type(msg)))
     from_user = msg.member if isinstance(msg.chat, Group) else msg.sender
-    print(admins)
     return from_user in admins
 
 '''
@@ -95,6 +102,7 @@ def remote_kick(msg):
             if member_to_kick in admins:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
+            logger.error(str("【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
             member_to_kick.remove()
             return '成功移出 @{}'.format(member_to_kick.name)
 
@@ -160,7 +168,7 @@ def wxpy_group(msg):
     if ret_msg:
         return ret_msg
     elif msg.is_at:
-        pass
+        tuling.do_reply(msg)
 
 
 @bot.register(groups, NOTE)
