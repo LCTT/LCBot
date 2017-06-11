@@ -155,19 +155,20 @@ def invite(user, keyword):
     from random import randrange
     group = bot.groups().search(keyword_of_group[keyword])
     if len(group) > 0:
+        for i in range(0, len(group)):
+            if user in group[i]:
+                content = "您已经加入了 {} [微笑]".format(group[i].nick_name)
+                user.send(content)
+                return
         if len(group) == 1:
             target_group = group[0]
         else:
             index = randrange(len(group))
             target_group = group[index]
-        if user in target_group:
-            content = "您已经加入了 {} [微笑]".format(target_group.nick_name)
-            user.send(content)
-        else:
-            try:
-                target_group.add_members(user, use_invitation=True)
-            except:
-                user.send("邀请错误！机器人邀请好友进群已达当日限制。请您明日再试")
+        try:
+            target_group.add_members(user, use_invitation=True)
+        except:
+            user.send("邀请错误！机器人邀请好友进群已达当日限制。请您明日再试")
     else:
         user.send("该群状态有误，您换个关键词试试？")
 
