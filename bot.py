@@ -130,6 +130,7 @@ def remote_kick(msg):
                 return '无法移出 @{}'.format(member_to_kick.name)
 
             logger.error(get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
+            member_to_kick.set_remark_name("[黑名单]-"+get_time())
             member_to_kick.remove()
             for ready_to_kick_group in  groups:
                 if member_to_kick in ready_to_kick_group:
@@ -193,10 +194,13 @@ def new_friends(msg):
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
-    if msg.text.lower() in keyword_of_group.keys():
-        invite(msg.sender, msg.text.lower())
+    if msg.sender.name.find("黑名单"):
+        return "您已被拉黑！"
     else:
-        return invite_text
+        if msg.text.lower() in keyword_of_group.keys():
+            invite(msg.sender, msg.text.lower())
+        else:
+            return invite_text
 
 
 # 管理群内的消息处理
