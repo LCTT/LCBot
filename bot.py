@@ -13,7 +13,6 @@ import os
 '''
 bot = Bot('bot.pkl', console_qr=True)
 bot.messages.max_history = 0
-tuling = Tuling(api_key=turing_key)
 
 '''
 开启 PUID 用于后续的控制
@@ -206,7 +205,12 @@ def wxpy_group(msg):
     if ret_msg:
         return ret_msg
     elif msg.is_at:
-        tuling.do_reply(msg)
+        if turing_key :
+            tuling = Tuling(api_key=turing_key)
+            tuling.do_reply(msg)
+        else:
+            return "忙着呢，别烦我！";
+            pass
 
 
 @bot.register(groups, NOTE)
