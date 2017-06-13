@@ -131,6 +131,11 @@ def remote_kick(msg):
 
             logger.error(str("【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
             member_to_kick.remove()
+            for ready_to_kick_group in  groups:
+                if member_to_kick in ready_to_kick_group:
+                    ready_to_kick_group.remove_members(member_to_kick)
+                    logger.error(str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name))
+           
             return '成功移出 @{}'.format(member_to_kick.name)
 
 
