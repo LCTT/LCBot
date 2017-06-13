@@ -39,14 +39,15 @@ rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)'
 
 # 下方为函数定义
 
-
+def get_time():
+    return str(time.strftime("%Y-%m-%d %H:%M:%S"))
 
 '''
 机器人消息提醒设置
 '''
 group_receiver = ensure_one(bot.groups().search(alert_group))
 logger = get_wechat_logger(group_receiver)
-logger.error("机器人登陆成功！")
+logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
 重启机器人
@@ -63,7 +64,7 @@ def heartbeat():
         time.sleep(3600)
         # noinspection PyBroadException
         try:
-            logger.error("LCBot is Online")
+            logger.error(get_time() + " 机器人目前在线,共有好友 【" + str(len(bot.friends())) + "】 群 【 " + str(len(bot.groups())) + "】" )
         except ResponseError as e:
             if 1100 <= e.err_code <= 1102:
                 logger.critical('LCBot offline: {}'.format(e))
@@ -128,12 +129,12 @@ def remote_kick(msg):
             if member_to_kick in admins:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
-            logger.error(str("【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
+            logger.error(get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
             member_to_kick.remove()
             for ready_to_kick_group in  groups:
                 if member_to_kick in ready_to_kick_group:
                     ready_to_kick_group.remove_members(member_to_kick)
-                    logger.error(str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name))
+                    logger.error(get_time()+ str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name))
            
             return '成功移出 @{}'.format(member_to_kick.name)
 
