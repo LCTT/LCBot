@@ -194,7 +194,7 @@ def new_friends(msg):
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
-    if msg.sender.name.find("黑名单"):
+    if msg.sender.name.find("黑名单") != -1:
         return "您已被拉黑！"
     else:
         if msg.text.lower() in keyword_of_group.keys():
