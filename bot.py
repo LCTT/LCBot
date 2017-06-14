@@ -190,7 +190,7 @@ def new_friends(msg):
     if msg.text.lower() in keyword_of_group.keys():
         invite(user, msg.text.lower())
     else:
-        return invite_text
+        user.send(invite_text) 
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
