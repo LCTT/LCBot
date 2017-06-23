@@ -29,9 +29,19 @@ rp_new_member_name = (
 )
 
 # 格式化 Group
-groups = list(map(lambda x: bot.groups().search(puid=x)[0], group_puids))
+try:
+    groups = list(map(lambda x: bot.groups().search(puid=x)[0], group_puids))
+except:
+    print("查找管理群出错！请检查管理群 puid 是否输入正确")
+    quit()
+
 # 格式化 Admin
-admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
+try:
+    admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
+except:
+    print("查找管理员出错！请检查管理员 puid 是否输入正确")
+    quit()
+
 
 # 远程踢人命令: 移出 @<需要被移出的人>
 rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)')
