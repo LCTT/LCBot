@@ -252,6 +252,13 @@ def welcome(msg):
     if name:
         return welcome_text.format(name)
 
+@bot.register(alert_reciever, except_self=False)
+def alert_command(msg):
+    if from_admin(msg):
+        if msg.text == "状态":
+            return status()
+        elif msg.text == "重启":
+            _restart()
 
 
 
