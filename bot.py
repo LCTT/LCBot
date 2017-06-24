@@ -241,10 +241,6 @@ def wxpy_group(msg):
         if turing_key :
             tuling = Tuling(api_key=turing_key)
             tuling.do_reply(msg)
-        else:
-            return "忙着呢，别烦我！";
-            pass
-
 
 @bot.register(groups, NOTE)
 def welcome(msg):
