@@ -72,6 +72,12 @@ logger.error(str("机器人登陆成功！"+ get_time()))
 def _restart():
     os.execv(sys.executable, [sys.executable] + sys.argv)
 
+'''
+状态汇报
+'''
+def status():
+    status_text = get_time() + " 机器人目前在线,共有好友 【" + str(len(bot.friends())) + "】 群 【 " + str(len(bot.groups())) + "】"
+    return status_text
 
 '''
 定时报告进程状态
@@ -81,7 +87,7 @@ def heartbeat():
         time.sleep(3600)
         # noinspection PyBroadException
         try:
-            logger.error(get_time() + " 机器人目前在线,共有好友 【" + str(len(bot.friends())) + "】 群 【 " + str(len(bot.groups())) + "】" )
+            logger.error(status())
         except ResponseError as e:
             if 1100 <= e.err_code <= 1102:
                 logger.critical('LCBot offline: {}'.format(e))
