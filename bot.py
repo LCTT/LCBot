@@ -55,8 +55,15 @@ def get_time():
 '''
 机器人消息提醒设置
 '''
-group_receiver = ensure_one(bot.groups().search(alert_group))
-logger = get_wechat_logger(group_receiver)
+if group_receiver:
+    try:
+        alert_receiver = ensure_one(bot.groups().search(alert_group))
+    except:
+        print("警报群设置有误，请检查群名是否存在且唯一")
+        alert_receiver = bot.file_helper
+else:
+    alert_receiver = bot.file_helper
+logger = get_wechat_logger(alert_receiver)
 logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
