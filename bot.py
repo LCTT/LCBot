@@ -55,8 +55,15 @@ def get_time():
 '''
 机器人消息提醒设置
 '''
-group_receiver = ensure_one(bot.groups().search(alert_group))
-logger = get_wechat_logger(group_receiver)
+if group_receiver:
+    try:
+        alert_receiver = ensure_one(bot.groups().search(alert_group))
+    except:
+        print("警报群设置有误，请检查群名是否存在且唯一")
+        alert_receiver = bot.file_helper
+else:
+    alert_receiver = bot.file_helper
+logger = get_wechat_logger(alert_receiver)
 logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
@@ -65,6 +72,12 @@ logger.error(str("机器人登陆成功！"+ get_time()))
 def _restart():
     os.execv(sys.executable, [sys.executable] + sys.argv)
 
+'''
+状态汇报
+'''
+def status():
+    status_text = get_time() + " 机器人目前在线,共有好友 【" + str(len(bot.friends())) + "】 群 【 " + str(len(bot.groups())) + "】"
+    return status_text
 
 '''
 定时报告进程状态
@@ -74,7 +87,7 @@ def heartbeat():
         time.sleep(3600)
         # noinspection PyBroadException
         try:
-            logger.error(get_time() + " 机器人目前在线,共有好友 【" + str(len(bot.friends())) + "】 群 【 " + str(len(bot.groups())) + "】" )
+            logger.error(status())
         except ResponseError as e:
             if 1100 <= e.err_code <= 1102:
                 logger.critical('LCBot offline: {}'.format(e))
@@ -239,6 +252,13 @@ def welcome(msg):
     if name:
         return welcome_text.format(name)
 
+@bot.register(alert_reciever, except_self=False)
+def alert_command(msg):
+    if from_admin(msg):
+        if msg.text == "状态":
+            return status()
+        elif msg.text == "重启":
+            _restart()
 
 
 

@@ -24,6 +24,7 @@ LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国
 5. 监控群每小时发送心跳包
 6. 管理员踢人监控群内留底
 7. 被拉黑的用户，无法被再次拉群。需要管理员手动释放。
+8. 管理员在监控群发送指令获取状态或进行特定操作（现支持“状态”、“重启”）
 
 ## 需要
 - Python 3
@@ -55,17 +56,19 @@ python bot.py
 
 
 ## 使用
-首先，获取puid
+首先，获取 puid
 ```
 python3 export_puid.py
 ```
-执行成功后，在当前目录下会生成一个data文件，在data文件中，你可以看的用户的puid和群的puid
+执行成功后，在当前目录下会生成一个 data 文件，在 data 文件中，你可以看的用户的 puid 和群的 puid
 
 > 如果执行后，二维码展示不正常 ，可以执行`sudo localectl set-locale LANG=C.UTF-8`
 
-编辑 config.py 中第 10 行和 20 行，分别填入用户的puid 和群的puid 
+编辑 config.py 中第 10 行和 20 行，分别填入管理员的 puid 和群的 puid
 
-编辑 config.py 中第 60 行和 62 行，填入管理群名称和图灵机器人的ID
+编辑 config.py 中第 56 行和 69 行，填入管理群名称和监控群名称
+
+编辑 config.py 中第 71 行，填入图灵机器人的 ID
 
 执行命令
 ```
