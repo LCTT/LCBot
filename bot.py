@@ -55,7 +55,7 @@ def get_time():
 '''
 机器人消息提醒设置
 '''
-if group_receiver:
+if alert_group:
     try:
         alert_receiver = ensure_one(bot.groups().search(alert_group))
     except:
@@ -252,7 +252,7 @@ def welcome(msg):
     if name and invite_reply:
         return welcome_text.format(name)
 
-@bot.register(alert_reciever, except_self=False)
+@bot.register(alert_receiver, except_self=False)
 def alert_command(msg):
     if from_admin(msg):
         if msg.text == "状态":
