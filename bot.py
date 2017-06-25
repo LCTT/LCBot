@@ -237,11 +237,11 @@ def wxpy_group(msg):
     ret_msg = remote_kick(msg)
     if ret_msg:
         return ret_msg
-    elif msg.is_at:
+    elif msg.is_at and not silence_mode:
         if turing_key :
             tuling = Tuling(api_key=turing_key)
             tuling.do_reply(msg)
-        elif not silence_mode:
+        else:
             return "忙着呢，别烦我！";
             pass
 
