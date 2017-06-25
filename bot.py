@@ -142,7 +142,7 @@ def remote_kick(msg):
         if match:
             name_to_kick = match.group(1)
 
-            if not from_admin(msg):
+            if not from_admin(msg) and not silence_mode:
                 return '感觉有点不对劲… @{}'.format(msg.member.name)
 
             member_to_kick = ensure_one(list(filter(
@@ -241,7 +241,7 @@ def wxpy_group(msg):
         if turing_key :
             tuling = Tuling(api_key=turing_key)
             tuling.do_reply(msg)
-        elif group_at_reply:
+        elif not silence_mode:
             return "忙着呢，别烦我！";
             pass
 
@@ -249,7 +249,7 @@ def wxpy_group(msg):
 @bot.register(groups, NOTE)
 def welcome(msg):
     name = get_new_member_name(msg)
-    if name and invite_reply:
+    if name and not silence_mode:
         return welcome_text.format(name)
 
 @bot.register(alert_receiver, except_self=False)
@@ -259,7 +259,6 @@ def alert_command(msg):
             return status()
         elif msg.text == "重启":
             _restart()
-
 
 
 embed()
