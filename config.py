@@ -30,7 +30,7 @@ welcome_text = '''🎉 欢迎 @{} 的加入！
 invite_text = """欢迎您，我是「Linux 中国」微信群助手，
 请输入如下关键字加入群：
 - 运维 开发 安全 嵌入式 学生 找工作
-- 运维密码  机器人 
+- 运维密码  机器人
 - DBA PHP Python Golang Docker LFS vim
 进群四件事：
 1、阅读群公告，
@@ -69,3 +69,8 @@ female_group="机器人测试群"
 alert_group="机器人测试群"
 
 turing_key=''
+
+'''
+未设置图灵 key 时是否回复群中的 at
+'''
+group_at_reply=True
