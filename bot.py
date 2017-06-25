@@ -249,7 +249,7 @@ def wxpy_group(msg):
 @bot.register(groups, NOTE)
 def welcome(msg):
     name = get_new_member_name(msg)
-    if name:
+    if name and invite_reply:
         return welcome_text.format(name)
 
 @bot.register(alert_reciever, except_self=False)
