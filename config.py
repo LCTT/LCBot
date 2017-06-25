@@ -70,6 +70,13 @@ alert_group="机器人测试群"
 
 turing_key=''
 
+# 以下为功能配置选项
+
+'''
+入群欢迎开关
+'''
+invite_reply=True
+
 '''
 未设置图灵 key 时是否回复群中的 at
 '''
