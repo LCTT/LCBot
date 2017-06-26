@@ -7,9 +7,9 @@
 LCBot 是一个为 Linux 中国服务的微信机器人，主要为 Linux 中国下的微信群做管理、维护等工作。
 
 ##  演示
-![linux_cn](https://ooo.0o0.ooo/2017/04/28/5903576f5d014.jpeg)
+![linux_cn](https://ooo.0o0.ooo/2017/06/26/5950e555835b2.png)
 
-扫描二维码或搜索微信号`linux_cn`，回复关键词 `机器人` ，即可拉入本项目微信讨论群
+扫描二维码或搜索微信号`china_linux`，回复关键词 `机器人` ，即可拉入本项目微信讨论群
 
 视频教程地址：[点我查看视频教程集合](http://dwz.cn/lcbot) | [Linux/macOS 使用教程](https://v.qq.com/x/page/k03996ry5o1.html) |[完整版 Win 10 使用教程](https://v.qq.com/x/page/y03990en5qu.html) | [单群版机器人使用教程](https://v.qq.com/x/page/p05007bqjv1.html)
 
