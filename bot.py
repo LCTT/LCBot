@@ -147,14 +147,18 @@ def remote_kick(msg):
                 return '感觉有点不对劲… @{}'.format(msg.member.name)
 
             member_to_kick = ensure_one(list(filter(
-                lambda x: x.name == name_to_kick, msg.chat)))
+                lambda x: x.name == name_to_kick, msg.sender.members)))
             if member_to_kick  == bot.self:
                 return '无法移出 @{}'.format(member_to_kick.name)
             if member_to_kick in admins:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
             logger.error(get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
-            member_to_kick.set_remark_name("[黑名单]-"+get_time())
+            try:
+                member_to_kick.set_remark_name("[黑名单]-"+get_time())
+            except:
+                logger.error(get_time() + str("为 【" + member_to_kick.name + "】 设置黑名单时出错"))
+
             if member_to_kick in msg.sender:
                 member_to_kick.remove()
                 kick_info = '成功移出 @{}'.format(member_to_kick.name)
