@@ -64,7 +64,7 @@ if alert_group:
         alert_receiver = bot.file_helper
 else:
     alert_receiver = bot.file_helper
-logger = get_wechat_logger(alert_receiver, alert_level)
+logger = get_wechat_logger(alert_receiver, str(alert_level))
 logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
