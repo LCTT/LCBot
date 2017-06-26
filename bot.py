@@ -55,6 +55,7 @@ def get_time():
 '''
 机器人消息提醒设置
 '''
+alert_level = 30 # DEBUG: 10, INFO: 20, WARNING: 30, ERROR: 40, FATAL: 50
 if alert_group:
     try:
         alert_receiver = ensure_one(bot.groups().search(alert_group))
@@ -63,7 +64,7 @@ if alert_group:
         alert_receiver = bot.file_helper
 else:
     alert_receiver = bot.file_helper
-logger = get_wechat_logger(alert_receiver)
+logger = get_wechat_logger(alert_receiver, alert_level)
 logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
