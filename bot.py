@@ -143,8 +143,11 @@ def remote_kick(msg):
         if match:
             name_to_kick = match.group(1)
 
-            if not from_admin(msg) and not silence_mode:
-                return '感觉有点不对劲… @{}'.format(msg.member.name)
+            if not from_admin(msg):
+                if not silence_mode:
+                    return '感觉有点不对劲… @{}'.format(msg.member.name)
+                else:
+                    return
 
             member_to_kick = ensure_one(list(filter(
                 lambda x: x.name == name_to_kick, msg.sender.members)))
