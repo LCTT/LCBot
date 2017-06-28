@@ -163,7 +163,7 @@ def remote_kick(msg):
                 logger.error(get_time() + str("为 【" + member_to_kick.name + "】 设置黑名单时出错"))
 
             if member_to_kick in msg.sender:
-                member_to_kick.remove()
+                msg.sender.remove_members(member_to_kick)
                 kick_info = '成功移出 @{}'.format(member_to_kick.name)
             else:
                 kick_info = '@{} 已不在群中'.format(member_to_kick.name)
@@ -171,6 +171,7 @@ def remote_kick(msg):
             for ready_to_kick_group in  groups:
                 if member_to_kick in ready_to_kick_group:
                     ready_to_kick_group.remove_members(member_to_kick)
+                    ready_to_kick_group.send(str("【" + member_to_kick.name + "】 因其在 【" + msg.sender.name + "】 的行为被系统自动移出"))
                     logger.error(get_time()+ str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name))
 
             return kick_info
