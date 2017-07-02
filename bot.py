@@ -13,7 +13,7 @@ import platform
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
 console_qr=(False if platform.system() == 'Windows' else True)
-bot = Bot('bot.pkl', console_qr=True)
+bot = Bot('bot.pkl', console_qr=console_qr)
 bot.messages.max_history = 0
 
 '''
