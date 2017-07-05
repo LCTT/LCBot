@@ -27,6 +27,7 @@ group_name = '"机器人测试群"'
 """
 from wxpy import *
 import re
+import platform
 console_qr=(False if platform.system() == 'Windows' else True)
 bot = Bot('bot.pkl', console_qr=console_qr)
 
