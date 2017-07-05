@@ -6,7 +6,8 @@ from wxpy import *
 '''
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
-bot = Bot('bot.pkl', console_qr=True)
+console_qr=(False if platform.system() == 'Windows' else True)
+bot = Bot('bot.pkl', console_qr=console_qr)
 
 
 '''
@@ -23,13 +24,9 @@ with  open('data', 'w',encoding='UTF-8') as output:
     output.write("-----Friends-------\n")
     for i in friends:
         output.write(str(i.nick_name + " ---> " + i.puid + "\n"))
-    
+
     output.write("-----Groups-------\n")
     for i in groups:
         output.write(str(i.name + " ---> " + i.puid + "\n"))
 
 print("数据输出成功！")
-
-
-
-
