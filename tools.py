@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from wxpy import *
+import platform
 
 
 console_qr=(False if platform.system() == 'Windows' else True)
