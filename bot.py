@@ -30,19 +30,20 @@ rp_new_member_name = (
     re.compile(r'邀请"(.+)"加入'),
 )
 
-# 格式化 Group
+# 格式化被管理群 Groups
 try:
-    groups = list(map(lambda x: bot.groups().search(puid=x)[0], group_puids))
+    groups = list(filter(lambda x: x.name.startswith(group_prefix), bot.groups().search(group_prefix)))
 except:
-    print("查找管理群出错！请检查管理群 puid 是否输入正确")
+    print("查找被管理群出错！请检查被管理群前缀（group_prefix）是否配置正确")
     quit()
 
-# 格式化 Admin
+# 格式化管理员群 Admin_group
 try:
-    admins = list(map(lambda x: bot.friends().search(puid=x)[0], admin_puids))
+    admin_group = ensure_one(bot.groups().search(admin_group_name))
 except:
-    print("查找管理员出错！请检查管理员 puid 是否输入正确")
-    quit()
+    print("查找管理员群出错！请检查管理群群名（admin_group_name）是否配置正确")
+    print("现将默认设置为只有本帐号为管理员")
+    admin_group = None
 
 
 # 远程踢人命令: 移出 @<需要被移出的人>
@@ -134,7 +135,7 @@ def from_admin(msg):
     if not isinstance(msg, Message):
         raise TypeError('expected Message, got {}'.format(type(msg)))
     from_user = msg.member if isinstance(msg.chat, Group) else msg.sender
-    return from_user in admins
+    return from_user in admin_group.members if admin_group else from_user == bot.self
 
 '''
 远程踢人命令
