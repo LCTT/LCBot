@@ -48,7 +48,7 @@ def fresh_groups():
     except:
         print("查找管理员群出错！请检查管理群群名（admin_group_name）是否配置正确")
         print("现将默认设置为只有本帐号为管理员")
-        global admin_group = None
+        admin_group = None
 
 fresh_groups()
 
