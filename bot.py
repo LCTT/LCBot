@@ -30,21 +30,27 @@ rp_new_member_name = (
     re.compile(r'邀请"(.+)"加入'),
 )
 
-# 格式化被管理群 Groups
-try:
-    groups = list(filter(lambda x: x.name.startswith(group_prefix), bot.groups().search(group_prefix)))
-except:
-    print("查找被管理群出错！请检查被管理群前缀（group_prefix）是否配置正确")
-    quit()
+'''
+管理员群及被管理群初始化
+'''
+def fresh_groups():
+    global groups, admin_group
+    # 格式化被管理群 Groups
+    try:
+        groups = list(filter(lambda x: x.name.startswith(group_prefix), bot.groups(update = True).search(group_prefix)))
+    except:
+        print("查找被管理群出错！请检查被管理群前缀（group_prefix）是否配置正确")
+        quit()
 
-# 格式化管理员群 Admin_group
-try:
-    admin_group = ensure_one(bot.groups().search(admin_group_name))
-except:
-    print("查找管理员群出错！请检查管理群群名（admin_group_name）是否配置正确")
-    print("现将默认设置为只有本帐号为管理员")
-    admin_group = None
+    # 格式化管理员群 Admin_group
+    try:
+        admin_group = ensure_one(bot.groups(update = True).search(admin_group_name))
+    except:
+        print("查找管理员群出错！请检查管理群群名（admin_group_name）是否配置正确")
+        print("现将默认设置为只有本帐号为管理员")
+        global admin_group = None
 
+fresh_groups()
 
 # 远程踢人命令: 移出 @<需要被移出的人>
 rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)')
@@ -271,6 +277,8 @@ def alert_command(msg):
             return status()
         elif msg.text == "重启":
             _restart()
-
+        elif msg.text == "刷新":
+            fresh_groups()
+            return "群信息已更新，现有被管理群 【{}】，管理员 【{}】".format(len(groups), len(admin_group) if admin_group else 1)
 
 embed()
