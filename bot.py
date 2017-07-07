@@ -28,6 +28,7 @@ bot.enable_puid('wxpy_puid.pkl')
 rp_new_member_name = (
     re.compile(r'^"(.+)"通过'),
     re.compile(r'邀请"(.+)"加入'),
+    re.compile(r'invited "(.+)" to the group chat'),
 )
 
 '''
