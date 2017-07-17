@@ -163,7 +163,7 @@ def remote_kick(msg):
                 lambda x: x.name == name_to_kick, msg.sender.members)))
             if member_to_kick  == bot.self:
                 return '无法移出 @{}'.format(member_to_kick.name)
-            if member_to_kick in admins:
+            if member_to_kick in admin_group.members:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
             logger.error(get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
