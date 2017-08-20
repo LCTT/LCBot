@@ -50,6 +50,7 @@ pip3 install -U -r  requirements.txt
 
 ```
 docker pull osmeteor/pythonlcbot
+# 或者使用国内镜像: docker pull registry.docker-cn.com/osmeteor/pythonlcbot
 docker run -i -t osmeteor/pythonlcbot /bin/bash
 cd /opt/LCBot
 python bot.py
