@@ -249,6 +249,8 @@ def new_friends(msg):
         invite(user, msg.text.lower())
     else:
         user.send(invite_text)
+    random_sleep()
+    condition_invite(user)
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
