@@ -174,11 +174,11 @@ def remote_kick(msg):
             if member_to_kick in admin_group.members:
                 return '无法移出 @{}'.format(member_to_kick.name)
 
-            logger.error(get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】"))
+            logger_msg = get_time() + str(" 【"+member_to_kick.name + "】 被 【"+msg.member.name+"】 移出 【" + msg.sender.name+"】")
             try:
                 member_to_kick.set_remark_name("[黑名单]-"+get_time())
             except:
-                logger.error(get_time() + str("为 【" + member_to_kick.name + "】 设置黑名单时出错"))
+                logger_msg += "\n" + str("为 【" + member_to_kick.name + "】 设置黑名单时出错")
 
             if member_to_kick in msg.sender:
                 msg.sender.remove_members(member_to_kick)
@@ -190,8 +190,9 @@ def remote_kick(msg):
                 if member_to_kick in ready_to_kick_group:
                     ready_to_kick_group.remove_members(member_to_kick)
                     ready_to_kick_group.send(str("【" + member_to_kick.name + "】 因其在 【" + msg.sender.name + "】 的行为被系统自动移出"))
-                    logger.error(get_time()+ str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name))
+                    logger_msg += "\n" + str("【"+member_to_kick.name + "】 被系统自动移出 " +  ready_to_kick_group.name)
 
+            logger.error(logger_msg)
             return kick_info
 
 
