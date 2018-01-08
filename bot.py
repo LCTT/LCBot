@@ -78,6 +78,14 @@ logger = get_wechat_logger(alert_receiver, str(alert_level))
 logger.error(str("机器人登陆成功！"+ get_time()))
 
 '''
+随机延时
+'''
+def random_sleep():
+    from random import randrange
+    rnd_time = randrange(2, 7)
+    time.sleep(rnd_time)
+
+'''
 重启机器人
 '''
 def _restart():
@@ -233,6 +241,7 @@ def invite(user, keyword):
 '''
 @bot.register(msg_types=FRIENDS)
 def new_friends(msg):
+    random_sleep()
     user = msg.card.accept()
     if msg.text.lower() in keyword_of_group.keys():
         invite(user, msg.text.lower())
@@ -241,6 +250,7 @@ def new_friends(msg):
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
+    random_sleep()
     if msg.sender.name.find("黑名单") != -1:
         return "您已被拉黑！"
     else:
@@ -254,6 +264,7 @@ def exist_friends(msg):
 @bot.register(groups, except_self=False)
 def wxpy_group(msg):
     ret_msg = remote_kick(msg)
+    random_sleep()
     if ret_msg:
         return ret_msg
     elif msg.is_at and not silence_mode:
@@ -269,11 +280,13 @@ def wxpy_group(msg):
 def welcome(msg):
     name = get_new_member_name(msg)
     if name and not silence_mode:
+        random_sleep()
         return welcome_text.format(name)
 
 @bot.register(alert_receiver, except_self=False)
 def alert_command(msg):
     if from_admin(msg):
+        random_sleep()
         if msg.text == "状态":
             return status()
         elif msg.text == "重启":
