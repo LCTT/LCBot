@@ -26,9 +26,9 @@ bot.enable_puid('wxpy_puid.pkl')
 邀请信息处理
 '''
 rp_new_member_name = (
-    re.compile(r'^"(.+)"通过'),
-    re.compile(r'邀请"(.+)"加入'),
-    re.compile(r'invited "(.+)" to the group chat'),
+    re.compile(r'^"((\n?.?)+)"通过'),
+    re.compile(r'邀请"((\n?.?)+)"加入'),
+    re.compile(r'invited "((\n?.?)+)" to the group chat'),
 )
 
 '''
@@ -54,7 +54,7 @@ def fresh_groups():
 fresh_groups()
 
 # 远程踢人命令: 移出 @<需要被移出的人>
-rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)')
+rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@((\n?.?)+?)(?:\u2005?\s*$)')
 
 
 # 下方为函数定义
@@ -165,6 +165,7 @@ def remote_kick(msg):
                 if not silence_mode:
                     return '感觉有点不对劲… @{}'.format(msg.member.name)
                 else:
+                    print('非管理员 {} 想踢人...'.format(msg.member.name))
                     return
 
             member_to_kick = ensure_one(list(filter(
@@ -180,7 +181,7 @@ def remote_kick(msg):
             except:
                 logger_msg += "\n" + str("为 【" + member_to_kick.name + "】 设置黑名单时出错")
 
-            if member_to_kick in msg.sender:
+            if member_to_kick in msg.chat:
                 msg.sender.remove_members(member_to_kick)
                 kick_info = '成功移出 @{}'.format(member_to_kick.name)
             else:
@@ -248,6 +249,8 @@ def new_friends(msg):
         invite(user, msg.text.lower())
     else:
         user.send(invite_text)
+    random_sleep()
+    condition_invite(user)
 
 @bot.register(Friend, msg_types=TEXT)
 def exist_friends(msg):
