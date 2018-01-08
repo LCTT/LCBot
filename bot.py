@@ -38,7 +38,9 @@ def fresh_groups():
     global groups, admin_group
     # 格式化被管理群 Groups
     try:
-        groups = list(filter(lambda x: x.name.startswith(group_prefix), bot.groups(update = True).search(group_prefix)))
+        allgroups = bot.groups(update = True)
+        groups = list(filter(lambda x: x.name.startswith(group_prefix), allgroups.search(group_prefix)))
+        groups += list(filter(lambda x: x.name in additional_groups, allgroups))
     except:
         print("查找被管理群出错！请检查被管理群前缀（group_prefix）是否配置正确")
         quit()

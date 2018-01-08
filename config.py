@@ -21,6 +21,15 @@ admin_group_name = '机器人管理群'
 '''
 group_prefix = '机器人'
 
+'''
+定义非特定前缀的群
+
+注：必须输入完整名称
+'''
+additional_groups = (
+    '另一个机器人群',
+)
+
  # 新人入群的欢迎语
 welcome_text = '''🎉 欢迎 @{} 的加入！
 😃 有问题请私聊我。
