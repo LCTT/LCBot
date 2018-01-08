@@ -165,6 +165,7 @@ def remote_kick(msg):
                 if not silence_mode:
                     return '感觉有点不对劲… @{}'.format(msg.member.name)
                 else:
+                    print('非管理员 {} 想踢人...'.format(msg.member.name))
                     return
 
             member_to_kick = ensure_one(list(filter(
@@ -180,7 +181,7 @@ def remote_kick(msg):
             except:
                 logger_msg += "\n" + str("为 【" + member_to_kick.name + "】 设置黑名单时出错")
 
-            if member_to_kick in msg.sender:
+            if member_to_kick in msg.chat:
                 msg.sender.remove_members(member_to_kick)
                 kick_info = '成功移出 @{}'.format(member_to_kick.name)
             else:
