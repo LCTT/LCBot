@@ -26,9 +26,9 @@ bot.enable_puid('wxpy_puid.pkl')
 邀请信息处理
 '''
 rp_new_member_name = (
-    re.compile(r'^"(.+)"通过'),
-    re.compile(r'邀请"(.+)"加入'),
-    re.compile(r'invited "(.+)" to the group chat'),
+    re.compile(r'^"((\n?.?)+)"通过'),
+    re.compile(r'邀请"((\n?.?)+)"加入'),
+    re.compile(r'invited "((\n?.?)+)" to the group chat'),
 )
 
 '''
@@ -54,7 +54,7 @@ def fresh_groups():
 fresh_groups()
 
 # 远程踢人命令: 移出 @<需要被移出的人>
-rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@(.+?)(?:\u2005?\s*$)')
+rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@((\n?.?)+?)(?:\u2005?\s*$)')
 
 
 # 下方为函数定义
