@@ -2,25 +2,23 @@
 # coding: utf-8
 
 from wxpy import *
-from config import *
+import config
 import re
 from wxpy.utils import start_new_thread
 import time
 import os
 import platform
-
+from importlib import reload
 '''
 使用 cache 来缓存登陆信息，同时使用控制台登陆
 '''
 console_qr = (False if platform.system() == 'Windows' else True)
 bot = Bot('bot.pkl', console_qr=console_qr)
 bot.messages.max_history = 0
-
 '''
 开启 PUID 用于后续的控制
 '''
 bot.enable_puid('wxpy_puid.pkl')
-
 '''
 邀请信息处理
 '''
@@ -29,6 +27,14 @@ rp_new_member_name = (
     re.compile(r'邀请"((\n?.?)+)"加入'),
     re.compile(r'invited "((\n?.?)+)" to the group chat'),
 )
+
+# 远程踢人命令: 移出 @<需要被移出的人>
+rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@((\n?.?)+?)(?:\u2005?\s*$)')
+
+# 监控群监控等级
+alert_level = 30  # DEBUG: 10, INFO: 20, WARNING: 30, ERROR: 40, FATAL: 50
+
+# 下方为函数定义
 
 
 def fresh_groups():
@@ -40,10 +46,10 @@ def fresh_groups():
     try:
         allgroups = bot.groups(update=True)
         groups = list(
-            filter(lambda x: x.name.startswith(group_prefix),
-                   allgroups.search(group_prefix)))
+            filter(lambda x: x.name.startswith(config.group_prefix),
+                   allgroups.search(config.group_prefix)))
         groups += list(
-            filter(lambda x: x.name in additional_groups, allgroups))
+            filter(lambda x: x.name in config.additional_groups, allgroups))
     except:
         print("查找被管理群出错！请检查被管理群前缀（group_prefix）是否配置正确")
         quit()
@@ -51,39 +57,47 @@ def fresh_groups():
     # 格式化管理员群 Admin_group
     try:
         admin_group = ensure_one(
-            bot.groups(update=True).search(admin_group_name))
+            bot.groups(update=True).search(config.admin_group_name))
     except:
         print("查找管理员群出错！请检查管理群群名（admin_group_name）是否配置正确")
         print("现将默认设置为只有本帐号为管理员")
         admin_group = None
 
 
-fresh_groups()
-
-# 远程踢人命令: 移出 @<需要被移出的人>
-rp_kick = re.compile(r'^(?:移出|移除|踢出|拉黑)\s*@((\n?.?)+?)(?:\u2005?\s*$)')
-
-# 下方为函数定义
-
-
 def get_time():
     return str(time.strftime("%Y-%m-%d %H:%M:%S"))
 
 
-'''
-机器人消息提醒设置
-'''
-alert_level = 30  # DEBUG: 10, INFO: 20, WARNING: 30, ERROR: 40, FATAL: 50
-if alert_group:
-    try:
-        alert_receiver = ensure_one(bot.groups().search(alert_group))
-    except:
-        print("警报群设置有误，请检查群名是否存在且唯一")
+def get_logger():
+    '''
+    机器人消息提醒设置
+    '''
+    global alert_receiver, logger
+    if config.alert_group:
+        try:
+            alert_receiver = ensure_one(bot.groups().search(
+                config.alert_group))
+        except:
+            print("警报群设置有误，请检查群名是否存在且唯一")
+            alert_receiver = bot.file_helper
+    else:
         alert_receiver = bot.file_helper
-else:
-    alert_receiver = bot.file_helper
-logger = get_wechat_logger(alert_receiver, str(alert_level))
-logger.error(str("机器人登陆成功！" + get_time()))
+    logger = get_wechat_logger(alert_receiver, level=alert_level)
+
+
+def heartbeat():
+    '''
+    定时报告进程状态
+    '''
+    while bot.alive:
+        time.sleep(3600)
+        # noinspection PyBroadException
+        try:
+            logger.error(status())
+        except ResponseError as e:
+            if 1100 <= e.err_code <= 1102:
+                logger.critical('LCBot offline: {}'.format(e))
+                _restart()
 
 
 def random_sleep():
@@ -111,42 +125,26 @@ def status():
     return status_text
 
 
-def heartbeat():
-    '''
-    定时报告进程状态
-    '''
-    while bot.alive:
-        time.sleep(3600)
-        # noinspection PyBroadException
-        try:
-            logger.error(status())
-        except ResponseError as e:
-            if 1100 <= e.err_code <= 1102:
-                logger.critical('LCBot offline: {}'.format(e))
-                _restart()
-
-
-start_new_thread(heartbeat)
-
-
 def condition_invite(user):
     '''
     条件邀请
     '''
     if user.sex == 2:
-        female_groups = bot.groups().search(female_group)[0]
+        female_groups = bot.groups().search(config.female_group)[0]
         try:
             female_groups.add_members(user, use_invitation=True)
             pass
         except:
             pass
-    if (user.province in city_group.keys() or user.city in city_group.keys()):
+    if (user.province in config.city_group.keys()
+            or user.city in config.city_group.keys()):
         try:
             target_city_group = bot.groups().search(
-                city_group[user.province])[0]
+                config.city_group[user.province])[0]
             pass
         except:
-            target_city_group = bot.groups().search(city_group[user.city])[0]
+            target_city_group = bot.groups().search(
+                config.city_group[user.city])[0]
             pass
         try:
             if user not in target_city_group:
@@ -177,7 +175,7 @@ def remote_kick(msg):
             name_to_kick = match.group(1)
 
             if not from_admin(msg):
-                if not silence_mode:
+                if not config.silence_mode:
                     return '感觉有点不对劲… @{}'.format(msg.member.name)
                 else:
                     print('非管理员 {} 想踢人...'.format(msg.member.name))
@@ -241,7 +239,7 @@ def invite(user, keyword):
     按关键字搜索相应的群，如果存在相应的群，就向用户发起邀请。
     '''
     from random import randrange
-    group = bot.groups().search(keyword_of_group[keyword])
+    group = bot.groups().search(config.keyword_of_group[keyword])
     if len(group) > 0:
         for i in range(0, len(group)):
             if user in group[i]:
@@ -261,6 +259,12 @@ def invite(user, keyword):
         user.send("该群状态有误，您换个关键词试试？")
 
 
+fresh_groups()
+get_logger()
+logger.error(str("机器人登陆成功！" + get_time()))
+
+start_new_thread(heartbeat)
+
 # 下方为消息处理
 
 
@@ -272,10 +276,10 @@ def new_friends(msg):
     '''
     random_sleep()
     user = msg.card.accept()
-    if msg.text.lower() in keyword_of_group.keys():
+    if msg.text.lower() in config.keyword_of_group.keys():
         invite(user, msg.text.lower())
     else:
-        user.send(invite_text)
+        user.send(config.invite_text)
     random_sleep()
     condition_invite(user)
 
@@ -286,10 +290,10 @@ def exist_friends(msg):
     if msg.sender.name.find("黑名单") != -1:
         return "您已被拉黑！"
     else:
-        if msg.text.lower() in keyword_of_group.keys():
+        if msg.text.lower() in config.keyword_of_group.keys():
             invite(msg.sender, msg.text.lower())
         else:
-            return invite_text
+            return config.invite_text
 
 
 # 管理群内的消息处理
@@ -299,9 +303,9 @@ def wxpy_group(msg):
     random_sleep()
     if ret_msg:
         return ret_msg
-    elif msg.is_at and not silence_mode:
-        if turing_key:
-            tuling = Tuling(api_key=turing_key)
+    elif msg.is_at and not config.silence_mode:
+        if config.turing_key:
+            tuling = Tuling(api_key=config.turing_key)
             tuling.do_reply(msg)
         else:
             return "忙着呢，别烦我！"
@@ -311,9 +315,9 @@ def wxpy_group(msg):
 @bot.register(groups, NOTE)
 def welcome(msg):
     name = get_new_member_name(msg)
-    if name and not silence_mode:
+    if name and not config.silence_mode:
         random_sleep()
-        return welcome_text.format(name)
+        return config.welcome_text.format(name)
 
 
 @bot.register(alert_receiver, except_self=False)
@@ -327,6 +331,13 @@ def alert_command(msg):
         elif msg.text == "刷新":
             fresh_groups()
             return "群信息已更新，现有被管理群 【{}】，管理员 【{}】".format(
+                len(groups),
+                len(admin_group) if admin_group else 1)
+        elif msg.text == "更新":
+            reload(config)
+            fresh_groups()
+            get_logger()
+            return "配置重载成功，现有被管理群 【{}】，管理员 【{}】".format(
                 len(groups),
                 len(admin_group) if admin_group else 1)
 
