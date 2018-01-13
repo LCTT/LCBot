@@ -83,9 +83,11 @@ def get_logger():
     else:
         alert_receiver = bot.file_helper
 
-    if logger:
+    try:
         for h in logger.handlers:
             logger.removeHandler(h)
+    except:
+        pass
 
     logger = get_wechat_logger(alert_receiver, level=alert_level)
 
